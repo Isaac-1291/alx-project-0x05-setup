@@ -1,17 +1,27 @@
+import { WIDTH, HEIGHT } from '@/constants'
 import ImageCard from "@/components/common/ImageCard";
 import { ImageProps } from "@/interfaces";
 import { useState } from "react";
 
 const Home: React.FC = () => {
   const [prompt, setPrompt] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [generatedImages, setGeneratedImages] = useState<ImageProps[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGenerateImage = async () => {
-  console.log("Generating Image");
-  console.log(process.env.NEXT_PUBLIC_GPT_API_KEY);
-};
+    setIsLoading(true);
+    setImageUrl(null);
+
+    console.log("Generating Image");
+    console.log(process.env.NEXT_PUBLIC_GPT_API_KEY);
+
+    setTimeout(() => {
+      const dummyImage = `https://picsum.photos/${WIDTH}/${HEIGHT}?random=${Date.now()}`;
+      setImageUrl(dummyImage);
+      setIsLoading(false);
+    }, 2000);
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
@@ -33,9 +43,7 @@ const Home: React.FC = () => {
             onClick={handleGenerateImage}
             className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
           >
-            {/* Uncomment the below line to enable loading message */}
-            {/* {isLoading ? "Loading..." : "Generate Image"} */}
-            Generate Image
+            {isLoading ? "Loading..." : "Generate Image"}
           </button>
         </div>
 
